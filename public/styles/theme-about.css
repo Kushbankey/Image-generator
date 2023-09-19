@@ -1,0 +1,22 @@
+body {
+    background-color: lavender !important;
+}
+
+.website__title .title p span,
+.website__title .title-500 {
+    color: #a683e3;
+}
+
+.website__title .title p span::after {
+    background-color: #a683e3;
+}
+
+.nav-bar ul li a.active {
+    background-color: #fff;
+}
+
+@media (max-width: 920px) {
+    .nav-bar {
+        background-color: #a683e3;
+    }
+}
