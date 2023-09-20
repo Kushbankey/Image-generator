@@ -34,7 +34,11 @@
             </div> -->
 
                 <% //} else { %>
+                <% if(link==="NoImage"){ %>
+                    <p>Oops! No images found.</p>
 
+                <% } else { %>
+                 
                     <div class="gallery_container">
                         <div class="imageContainer">
                             <div class="downloadBtn">
@@ -73,7 +77,7 @@
                             <img src="<%= link[5] %>" alt="searched-img" data-downloadImg>
                         </div>
                     </div>
-                    <% //} %>
+                    <% } %>
 
                         <% } else { %>
                             <p>Your image will be visible here!!</p>

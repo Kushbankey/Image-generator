@@ -31,6 +31,10 @@ app.post("/search", async (req, res) => {
         });
 
         const photos = result.data.results;
+        if(photos.length===0){
+            const val="NoImage";
+            res.render("index.ejs", { link: val });
+        }
         const randomSmallURL = new Set();
         const maxUniqueItems = 6;
 
