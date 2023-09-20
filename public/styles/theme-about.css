@@ -20,3 +20,12 @@ body {
         background-color: #a683e3;
     }
 }
+
+@media (max-width: 495px) {
+    .website__title .title-500::after {
+        background-color: #a683e3;
+    }
+    footer{
+        display: none;
+    }
+}
