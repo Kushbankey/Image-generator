@@ -56,29 +56,95 @@ document.querySelectorAll(".nav-link").forEach((link) => {
 
 
 //Gallery
-let downloadBtn = document.querySelectorAll('.downloadBtn')
-image = document.querySelectorAll('[data-downloadImg]')
+function addDownloadBtn(){
+    let downloadBtn = document.querySelectorAll('.downloadBtn')
+    image = document.querySelectorAll('[data-downloadImg]')
 
-function toDataURL(url) {
-    return fetch(url).then((response) => {
-        return response.blob();
-    }).then(blob => {
-        return URL.createObjectURL(blob);
+    function toDataURL(url) {
+        return fetch(url).then((response) => {
+            return response.blob();
+        }).then(blob => {
+            return URL.createObjectURL(blob);
+        })
+    }
+
+    async function download(url) {
+        const a = document.createElement("a");
+        a.href = await url;
+        a.download = "Download.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    downloadBtn.forEach(btn => {
+        btn.addEventListener('click', () => {
+            let imageURL = btn.parentElement.querySelector('img').src
+            download(toDataURL(imageURL))
+        })
     })
 }
 
-async function download(url) {
-    const a = document.createElement("a");
-    a.href = await url;
-    a.download = "Download.png";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
+document.querySelector(".seeMore").addEventListener("click", async (event) => {
+    event.preventDefault();
+    const button = event.target;
+    const currentPage = parseInt(button.dataset.page);
+    const searchWord = (button.dataset.word);
+    //console.log(button);
 
-downloadBtn.forEach(btn => {
-    btn.addEventListener('click', () => {
-        let imageURL = btn.parentElement.querySelector('img').src
-        download(toDataURL(imageURL))
-    })
-})
+    try {
+        const response = await fetch(`/load-more?page=${currentPage + 1}&searchWord=${searchWord}`);
+        if (response.ok) {
+            const newImages = await response.json();
+            if (newImages.length > 0) {
+                newImages.forEach((imageUrl) => {
+                    const imageContainer = document.createElement("div");
+                    imageContainer.className = "imageContainer";
+
+                    const downloadBtn=document.createElement("div");
+                    downloadBtn.className="downloadBtn";
+                    const icon=document.createElement("i");
+                    icon.className="fa-solid fa-arrow-down";
+                    downloadBtn.appendChild(icon);
+
+                    const img = document.createElement("img");
+                    img.src = imageUrl;
+                    img.alt = "searched-img";
+                    img.setAttribute("data-downloadImg", "");
+
+                    imageContainer.appendChild(downloadBtn);
+                    imageContainer.appendChild(img);
+                    document.querySelector(".gallery_container").appendChild(imageContainer);
+                });
+
+                const seeMoreBtn= document.getElementsByClassName("seeMore")[0];
+                const container=document.querySelector(".gallery_container");
+
+                function moveToBottom(){
+                    if(seeMoreBtn && container){
+                        container.append(seeMoreBtn);
+                    }
+                }
+                moveToBottom();
+                //console.log(seeMoreBtn);
+                
+                // Update the button's data-page attribute
+                button.dataset.page = currentPage + 1;
+
+                // If you've reached a total of 30 images, hide the button
+                if (currentPage + 1 === 6) {
+                    button.style.display = "none";
+                }
+            } 
+            else {
+                button.style.display = "none"; // No more images to load
+            }
+            addDownloadBtn();
+        }
+    } 
+    catch (error) {
+        console.error(error);
+    }
+});
+
+addDownloadBtn();

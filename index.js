@@ -50,12 +50,49 @@ app.post("/search", async (req, res) => {
         const randomSmallURLArray = Array.from(randomSmallURL);
 
         //console.log(randomSmallURLArray);
-        res.render("index.ejs", { link: randomSmallURLArray });
+        res.render("index.ejs", { link: randomSmallURLArray, searchWord: req.body.searchWord });
     }
     catch (error) {
         console.log(error);
     }
 })
+
+
+app.get("/load-more", async (req, res) => {
+    try {
+        const page = req.query.page || 1; // Get the requested page from query params
+        const result = await axios.get(API_URL + "/search/photos", {
+            params: {
+            client_id: apiKey,
+            query: req.query.searchWord,
+            page: page, // Use the requested page number
+            },
+        });
+        //check
+        //console.log("Howdy!");
+  
+        // Extract and return new image URLs
+        const photos = result.data.results;
+        const randomSmallURL = new Set();
+        const maxUniqueItems = 6;
+
+        while (randomSmallURL.size < maxUniqueItems) {
+            const randomIndex = Math.floor(Math.random() * photos.length);
+            const smallURL = photos[randomIndex].urls.regular;
+
+            // Add the smallURL to the Set if it's not already in the Set
+            randomSmallURL.add(smallURL);
+        }
+
+        // Convert the Set back to an array if needed
+        const randomSmallURLArray = Array.from(randomSmallURL);
+
+        res.json(randomSmallURLArray);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}); 
 
 app.post("/random", async (req, res) => {
     try {

@@ -100,9 +100,8 @@ header {
 }
 
 .nav-bar ul li a.active {
-    background-color: var(--c5)
-        /*rgb(231, 231, 231)*/
-    ;
+    background-color: var(--c5);
+    color: var(--c4);
 }
 
 .nav-bar ul li a:hover {
@@ -271,6 +270,23 @@ main {
     /* Added object-fit to maintain aspect ratio */
 }
 
+.seeMore {
+    display: block;
+    margin: 1em auto;
+    border: none;
+    background-color: var(--c3);
+    border-radius: 1rem;
+    font-size: 1rem;
+    padding: .5rem 3rem;
+    font-family: var(--font-family1);
+    color: var(--c5);
+    font-weight: 300;
+    cursor: pointer;
+}
+
+.seeMore:hover {
+    background-color: var(--c4);
+}
 
 footer {
     font-family: var(--font-family1);

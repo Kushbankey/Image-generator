@@ -12,7 +12,8 @@ body {
 }
 
 .nav-bar ul li a.active {
-    background-color: #fff;
+    background-color: #a683e3;
+    color: lavender;
 }
 
 @media (max-width: 920px) {
